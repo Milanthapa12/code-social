@@ -1,0 +1,39 @@
+1. node must be 20.*
+2. npx create-next-app@latest or rc (released candidate version)
+3. 
+    npm i lucia @lucia-auth/adapter-prisma prisma @prisma/client 
+    npm i @tanstack/react-query @tanstack/react-query-devtools --legacy-peer-deps
+    npm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-placeholder --legacy-peer-deps
+    npm install uploadthing @uploadthing/react --legacy-peer-deps
+    npm i arctic --legacy-peer-deps
+    npm i date-fns --legacy-peer-deps
+    npm i ky --legacy-peer-deps
+    npm i next-themes --legacy-peer-deps
+    npm i react-cropper react-image-file-resizer react-intersection-observer react-linkify-it --legacy-peer-deps 
+    npm i stream-chat stream-chat-react --legacy-peer-deps
+
+    <!-- UI -->
+    npx --legacy-peer-deps shadcn-ui@latest init
+
+    npx --legacy-peer-deps shadcn-ui@latest add button dialog dropdown-menu form input label skeleton tabs textarea toast tooltip
+
+
+    <!-- DEV PACKAGES -->
+    npm i -D prettier eslint-config-prettier prettier-plugin-tailwindcss --legacy-peer-deps 
+4.
+5.
+6.
+7.
+8.
+9.
+10.
+11.
+12.
+13.
+14.
+15.
+16.
+17.
+18.
+19.
+20.
