@@ -1,12 +1,13 @@
 import { validateRequest } from '@/auth'
 import prisma from '@/lib/prisma'
-import { userData } from '@/lib/type'
 import { Loader2 } from 'lucide-react'
 import React, { Suspense } from 'react'
 import UserAvatar from './UserAvatar'
 import { unstable_cache } from 'next/cache'
 import { bigint } from 'zod'
 import Link from 'next/link'
+import { getUserDataSelect } from '@/lib/type'
+import FollowButton from '../FollowButton'
 
 export default function TrendingBlock() {
     return (
@@ -28,9 +29,14 @@ async function WhoToFollow() {
         where: {
             NOT: {
                 id: user.id
+            },
+            followers: {
+                none: {
+                    followerId: user.id
+                }
             }
         },
-        select: userData,
+        select: getUserDataSelect(user.id),
         take: 5
     })
 
@@ -38,15 +44,26 @@ async function WhoToFollow() {
         <div className="text-xl font-bold">Who to follow</div>
         {
             notFollowedUsers.map((user) => (
-                <div key={user.id} className="flex items-center gap-3">
-                    <UserAvatar avatarURL={user.avatar} className='flex-none' />
-                    <div>
-                        <p className="line-clamp-1 break-all font-semibold hover:underline">
-                            {user.name ?? ''}
-                        </p>
-                        <p className="line-clamp-1 break-all text-muted-foreground">
-                            @{user.username}</p>
-                    </div>
+                <div key={user.id} className="flex items-center justify-between gap-3">
+                    <Link href={`/users/${user.username}`} className='flex items-center gap-3'>
+                        <UserAvatar avatarURL={user.avatar} className='flex-none' />
+                        <div>
+                            <p className="line-clamp-1 break-all font-semibold hover:underline">
+                                {user.name ?? ''}
+                            </p>
+                            <p className="line-clamp-1 break-all text-muted-foreground">
+                                @{user.username}</p>
+                        </div>
+                    </Link>
+                    <FollowButton
+                        userId={user.id}
+                        initialState={{
+                            followers: user._count.followers,
+                            isFollowedByUser: user.followers.some(
+                                ({ followerId }) => followerId === user.id
+                            )
+                        }}
+                    />
                 </div>
             ))
         }
@@ -113,7 +130,8 @@ async function TrendingTopic() {
                 return (<Link key={title} href={`/hashtag/${title}`} className='block'>
                     <p className="line-clamp-1 break-all font-semibold hover:underline" title={title}>{hashtag}</p>
                     <div className="text-sm text-muted-forground">{count}</div>
-                </Link>)
+                </Link>
+                )
             })
             }
         </div>

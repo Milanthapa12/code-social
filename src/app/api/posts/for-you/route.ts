@@ -1,6 +1,6 @@
 import { validateRequest } from "@/auth"
 import prisma from "@/lib/prisma"
-import { postDataInclude, PostPage } from "@/lib/type"
+import { getPostDataInclude, PostPage } from "@/lib/type"
 import { NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
             error: "Unathorized access"
         }, { status: 401 })
         const posts = await prisma.post.findMany({
-            include: postDataInclude,
+            include: getPostDataInclude(user.id),
             orderBy: { createdAt: "desc" },
             take: pageSize + 1,
             cursor: cursor ? { id: cursor } : undefined

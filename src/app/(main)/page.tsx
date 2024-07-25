@@ -1,10 +1,5 @@
 "use server"
 import PostEditor from "@/app/components/post/editor/PostEditor";
-import Image from "next/image";
-// import { useSession } from "./SessionProvider";
-import prisma from "@/lib/prisma";
-import Post from "@/app/components/post/post";
-import { postDataInclude } from "@/lib/type";
 import TrendingBlock from "@/app/components/ui/TrendingBlock";
 import Feed from "./Feed";
 
