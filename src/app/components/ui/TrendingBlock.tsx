@@ -8,6 +8,7 @@ import { bigint } from 'zod'
 import Link from 'next/link'
 import { getUserDataSelect } from '@/lib/type'
 import FollowButton from '../FollowButton'
+import UserToolTip from '../user/UserToolTip'
 
 export default function TrendingBlock() {
     return (
@@ -45,16 +46,18 @@ async function WhoToFollow() {
         {
             notFollowedUsers.map((user) => (
                 <div key={user.id} className="flex items-center justify-between gap-3">
-                    <Link href={`/users/${user.username}`} className='flex items-center gap-3'>
-                        <UserAvatar avatarURL={user.avatar} className='flex-none' />
-                        <div>
-                            <p className="line-clamp-1 break-all font-semibold hover:underline">
-                                {user.name ?? ''}
-                            </p>
-                            <p className="line-clamp-1 break-all text-muted-foreground">
-                                @{user.username}</p>
-                        </div>
-                    </Link>
+                    <UserToolTip user={user}>
+                        <Link href={`/users/${user.username}`} className='flex items-center gap-3'>
+                            <UserAvatar avatarURL={user.avatar} className='flex-none' />
+                            <div>
+                                <p className="line-clamp-1 break-all font-semibold hover:underline">
+                                    {user.name}
+                                </p>
+                                <p className="line-clamp-1 break-all text-muted-foreground">
+                                    @{user.username}</p>
+                            </div>
+                        </Link>
+                    </UserToolTip>
                     <FollowButton
                         userId={user.id}
                         initialState={{

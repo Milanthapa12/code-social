@@ -12,6 +12,7 @@ import { notFound } from "next/navigation"
 import { userInfo } from "os"
 import { cache } from "react"
 import UserPost from "./UserPost"
+import Linkify from "@/app/components/Linkify"
 
 interface IPageProps {
     params: { username: string }
@@ -101,9 +102,11 @@ async function UserProfile({ user, loggedInUserId }: IUserProfileProps) {
         </div>
         {user.bio && (<>
             <hr />
-            <div className="whitespace-pre-line overflow-hidden break-words">
-                {user.bio}
-            </div>
+            <Linkify>
+                <div className="whitespace-pre-line overflow-hidden break-words">
+                    {user.bio}
+                </div>
+            </Linkify>
         </>)}
     </div>
         <UserPost userId={user.id} />

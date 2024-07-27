@@ -13,7 +13,7 @@ import { redirect } from "next/navigation";
 
 export async function register(credential: RegisterValues): Promise<{ error: string }> {
     try {
-        const { username, email, password } = registerRequestValidation.parse(credential)
+        const { name, username, email, password } = registerRequestValidation.parse(credential)
         const hashedPassword = await hash(password, {
             memoryCost: 19456,
             timeCost: 2,
@@ -49,6 +49,7 @@ export async function register(credential: RegisterValues): Promise<{ error: str
         await prisma.user.create({
             data: {
                 id: userId,
+                name: name,
                 username,
                 email,
                 password: hashedPassword

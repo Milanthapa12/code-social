@@ -18,6 +18,7 @@ export default function RegisterForm() {
     const form = useForm<RegisterValues>({
         resolver: zodResolver(registerRequestValidation),
         defaultValues: {
+            name: "",
             email: "",
             username: "",
             password: ""
@@ -38,12 +39,25 @@ export default function RegisterForm() {
                 {error && <p className="text-centet text-destructive">{error}</p>}
                 <FormField
                     control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                                <Input placeholder="Name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
                     name="username"
                     render={({ field }) => (
                         <FormItem>
                             <FormLabel>Username</FormLabel>
                             <FormControl>
-                                <Input placeholder="username" {...field} />
+                                <Input placeholder="Username" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -56,7 +70,7 @@ export default function RegisterForm() {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input placeholder="email" {...field} />
+                                <Input placeholder="Email" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
@@ -69,7 +83,7 @@ export default function RegisterForm() {
                         <FormItem>
                             <FormLabel>Password</FormLabel>
                             <FormControl>
-                                <PasswordInput placeholder="password" {...field} />
+                                <PasswordInput placeholder="Password" {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>
