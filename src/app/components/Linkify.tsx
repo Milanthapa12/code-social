@@ -9,19 +9,20 @@ export default function Linkify({ children }: ILinkifyProps) {
     return (
         <LinkifyUsername>
             <HashTag>
-                <LinkItUrl>{children}</LinkItUrl>
+                <LinkifyURL>{children}</LinkifyURL>
             </HashTag>
         </LinkifyUsername>
     )
 }
 
 function LinkifyURL({ children }: ILinkifyProps) {
-    return <LinkItUrl className="">{children}</LinkItUrl>
+    return <LinkItUrl className="text-primary hover:underline">{children}</LinkItUrl>
 }
 
 function LinkifyUsername({ children }: ILinkifyProps) {
+
     return <LinkIt regex={/(@[a-zA-Z0-9_-]+)/}
-        component={(match, key) => (<UserLinkWithTooltip key={key} username={match.slice(1)}>{match}</UserLinkWithTooltip>
+        component={(match, key) => (<UserLinkWithTooltip key={key} match={match} username={match.slice(1)}>{match}</UserLinkWithTooltip>
         )}
     >{children}</LinkIt>
 }

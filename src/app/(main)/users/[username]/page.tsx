@@ -13,6 +13,7 @@ import { userInfo } from "os"
 import { cache } from "react"
 import UserPost from "./UserPost"
 import Linkify from "@/app/components/Linkify"
+import EditProfile from "./EditProfile"
 
 interface IPageProps {
     params: { username: string }
@@ -97,7 +98,7 @@ async function UserProfile({ user, loggedInUserId }: IUserProfileProps) {
                 </div>
             </div>
             {user.id === loggedInUserId ? (
-                <Button>Edit Profile</Button>
+                <EditProfile user={user} />
             ) : (<FollowButton userId={user.id} initialState={followerInfo} />)}
         </div>
         {user.bio && (<>

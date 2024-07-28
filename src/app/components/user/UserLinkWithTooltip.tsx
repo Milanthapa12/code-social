@@ -8,11 +8,13 @@ import Link from "next/link"
 import { PropsWithChildren } from "react"
 import UserToolTip from "./UserToolTip"
 interface IUserLinkWithTooltipProps extends PropsWithChildren {
-    username: string
+    username: string,
+    match?: string
 }
 
-export default function UserLinkWithTooltip({ children, username }: IUserLinkWithTooltipProps) {
+export default function UserLinkWithTooltip({ children, username, match }: IUserLinkWithTooltipProps) {
 
+    console.log(match, "user")
     const { data } = useQuery({
         queryKey: ["user-data", username],
         queryFn: () => kyInstance.get(`/api/users/username/${username}`).json<UserData>(),

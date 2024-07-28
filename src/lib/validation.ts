@@ -23,3 +23,10 @@ export type LoginValues = z.infer<typeof loginRequestValidation>
 export const postValidation = z.object({
     content: requiredField("content")
 })
+
+export const updateUserProfileSchema = z.object({
+    name: requiredField("name"),
+    bio: z.string().max(1000, "Must be at most 1000 charecters")
+})
+
+export type UploadUserProfileValues = z.infer<typeof updateUserProfileSchema>
