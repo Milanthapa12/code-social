@@ -1,11 +1,13 @@
 import { PostData } from "@/lib/type"
 import Link from "next/link"
 import UserAvatar from "../ui/UserAvatar"
-import { formateRelativeDate } from "@/lib/utils"
+import { cn, formateRelativeDate } from "@/lib/utils"
 import PostMoreOption from "./PostMoreOption"
 import { User } from "lucia"
 import Linkify from "../Linkify"
 import UserToolTip from "../user/UserToolTip"
+import { Media } from "@prisma/client"
+import Image from "next/image"
 
 interface IPostProps {
     post: PostData,
@@ -29,7 +31,7 @@ export default function Post({ post, user }: IPostProps) {
                             {post.user.name ?? post.user.username}
                         </Link>
                     </UserToolTip>
-                    <Link href={`/posts./${post.id}`} className="block text-sm text-muted-foreground hover:underline">
+                    <Link href={`/posts/${post.id}`} suppressHydrationWarning className="block text-sm text-muted-foreground hover:underline">
                         {formateRelativeDate(post.createdAt)}
                     </Link>
                 </div>
@@ -38,6 +40,40 @@ export default function Post({ post, user }: IPostProps) {
         </div>
         <div className="whitespace-pre-line break-words">
             <Linkify>{post.content}</Linkify>
+            {!!post.attachments.length && (<MediaPreviews attachments={post.attachments} />)}
         </div>
     </article>)
+}
+
+interface MediaPreviewsProps {
+    attachments: Media[]
+}
+
+function MediaPreviews({ attachments }: MediaPreviewsProps) {
+    return (<div className={cn("flex flex-col gap-3", attachments.length > 1 && "sm:grid sm:grid-cols-3")}>
+        {attachments.map((m) => (
+            <MediaPreview key={m.id} media={m} />
+        ))}
+    </div>)
+}
+
+interface MediaPreviewProps {
+    media: Media
+}
+
+function MediaPreview({ media }: MediaPreviewProps) {
+    if (media.type === "IMAGE") {
+        return (<Image src={media.url}
+            alt="attachment"
+            width={500}
+            height={500}
+            className="mx-auto size-fit max-h-[30rem] rounded-2xl"
+        />)
+    }
+    if (media.type === "VIDEO") {
+        return (<video controls className="size-fit max-h-[30rem] rounded-2xl">
+            <source src={media.url} type={media.type} />
+        </video>)
+    }
+    return <p className="text-destructive">Usupported media type provide.</p>
 }

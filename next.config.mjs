@@ -8,12 +8,13 @@ const nextConfig = {
     },
     serverExternalPackages: ["@node-rs/argon2"],
     images: {
+        domains: ['ut', 's.io', 'utfs'],
         remotePatterns: [
             {
                 protocol: "https",
                 hostname: "utfs.io",
                 pathname: `/a/${process.env.NEXT_PUBLIC_UPLOADTHING_APP_ID}/*`
-            }
+            },
         ]
     }
 };

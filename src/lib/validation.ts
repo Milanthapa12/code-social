@@ -21,7 +21,8 @@ export type LoginValues = z.infer<typeof loginRequestValidation>
 
 
 export const postValidation = z.object({
-    content: requiredField("content")
+    content: requiredField("content"),
+    mediaIds: z.array(z.string())
 })
 
 export const updateUserProfileSchema = z.object({

@@ -1,0 +1,8 @@
+{
+    "crons": [
+        {
+            "path": "/api/crear-uploads",
+            "schedule": "0 2 * * *"
+        }
+    ]
+}
