@@ -13,15 +13,22 @@ export async function GET(req: NextRequest) {
         if (!user) return Response.json({
             error: "Unathorized access"
         }, { status: 401 })
-        const posts = await prisma.post.findMany({
-            include: getPostDataInclude(user.id),
+        const bookmarks = await prisma.bookmark.findMany({
+            where: {
+                userId: user.id
+            },
+            include: {
+                post: {
+                    include: getPostDataInclude(user.id)
+                }
+            },
             orderBy: { createdAt: "desc" },
             take: pageSize + 1,
             cursor: cursor ? { id: cursor } : undefined
         })
-        const nextCursor = posts.length > pageSize ? posts[pageSize].id : null
+        const nextCursor = bookmarks.length > pageSize ? bookmarks[pageSize].id : null
         const data: PostPage = {
-            posts: posts.slice(0, pageSize),
+            posts: bookmarks.slice(0, pageSize).map(bookmark => bookmark.post),
             nextCursor
         }
         return Response.json(data)
