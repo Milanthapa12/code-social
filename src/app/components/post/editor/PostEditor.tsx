@@ -68,7 +68,7 @@ export default function PostEditor() {
                         editor={editor}
                         className={cn("tiptap w-full max-h-[10rem] overflow-y-auto bg-background rounded-2xl px-5 py-3 focus:border-0 outline:border-0", isDragActive && "outline-dashed")}
                     />
-                    <input {...getInputProps} />
+                    <input {...getInputProps} type="hidden" />
                 </div>
             </div>
             {!!attachments.length && (<AttachmentPreviews attachemnts={attachments} removeAttachment={removeAttachment} />)}

@@ -1,3 +1,4 @@
+"use client"
 import { PostData } from "@/lib/type"
 import Link from "next/link"
 import UserAvatar from "../ui/UserAvatar"
@@ -10,12 +11,16 @@ import { Media } from "@prisma/client"
 import Image from "next/image"
 import LikeButton from "./LikeButton"
 import BookmarkButton from "./BookmarkButton"
+import { useState } from "react"
+import { MessageSquare } from "lucide-react"
+import Comments from "../comments/Comments"
 
 interface IPostProps {
     post: PostData,
     user: User
 }
 export default function Post({ post, user }: IPostProps) {
+    const [showComment, setShowComment] = useState(false)
 
     return (<article className="group/post space-y-3 rounded-2xl bg-card p-5 shadow-sm">
         <div className="flex justify-between gap-3">
@@ -45,13 +50,16 @@ export default function Post({ post, user }: IPostProps) {
             {!!post.attachments.length && (<MediaPreviews attachments={post.attachments} />)}
             <hr className="text-muted-foreground my-3" />
             <div className="flex justify-between gap-5">
-                <LikeButton
-                    postId={post.id}
-                    initialState={{
-                        likes: post._count.likes,
-                        isLikedByUser: post.likes.some((like) => like.userId === user.id)
-                    }}
-                />
+                <div className="flex items-center gap-5">
+                    <LikeButton
+                        postId={post.id}
+                        initialState={{
+                            likes: post._count.likes,
+                            isLikedByUser: post.likes.some((like) => like.userId === user.id)
+                        }}
+                    />
+                    <CommentButton post={post} onClick={() => setShowComment(!showComment)} />
+                </div>
                 <BookmarkButton
                     postId={post.id}
                     initialState={{
@@ -60,6 +68,7 @@ export default function Post({ post, user }: IPostProps) {
                 />
             </div>
         </div>
+        {showComment && <Comments post={post} />}
     </article>)
 }
 
@@ -94,4 +103,19 @@ function MediaPreview({ media }: MediaPreviewProps) {
         </video>)
     }
     return <p className="text-destructive">Usupported media type provide.</p>
+}
+
+interface CommentButtonProps {
+    post: PostData,
+    onClick: () => void
+}
+
+function CommentButton({ post, onClick }: CommentButtonProps) {
+    return (<button onClick={onClick} className="flex items-center gap-2">
+        <MessageSquare className="size-5" />
+        <span className="text-sm font-medium tabular-nums">
+            {post._count.comments}{" "}
+            <span className="hidden sm:inline">comments</span>
+        </span>
+    </button>)
 }

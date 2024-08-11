@@ -31,3 +31,7 @@ export const updateUserProfileSchema = z.object({
 })
 
 export type UploadUserProfileValues = z.infer<typeof updateUserProfileSchema>
+
+export const createCommentSchema = z.object({
+    content: requiredField('content')
+})
