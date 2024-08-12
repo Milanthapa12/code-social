@@ -55,19 +55,29 @@ export async function POST(req: Request, { params: { userId } }: { params: { use
         }
 
         //upsert- ignore if already exist
-        await prisma.follow.upsert({
-            where: {
-                followerId_followingId: {
+        await prisma.$transaction([
+            prisma.follow.upsert({
+                where: {
+                    followerId_followingId: {
+                        followerId: loggedInUser.id,
+                        followingId: userId
+                    }
+                },
+                update: {},
+                create: {
                     followerId: loggedInUser.id,
                     followingId: userId
                 }
-            },
-            update: {},
-            create: {
-                followerId: loggedInUser.id,
-                followingId: userId
-            }
-        })
+            }),
+            prisma.notification.create({
+                data: {
+                    issuerId: loggedInUser.id,
+                    recipentId: userId,
+                    type: "FOLLOW"
+                }
+            })
+        ])
+
         return new Response()
 
     } catch (error) {
@@ -86,12 +96,22 @@ export async function DELETE(req: Request, {
         if (!loggedInUser) {
             return Response.json({ error: "Unathorized Access" }, { status: 401 })
         }
-        await prisma.follow.deleteMany({
-            where: {
-                followerId: loggedInUser.id,
-                followingId: userId
-            }
-        })
+        await prisma.$transaction([
+            prisma.follow.deleteMany({
+                where: {
+                    followerId: loggedInUser.id,
+                    followingId: userId
+                }
+            }),
+            prisma.notification.deleteMany({
+                where: {
+                    issuerId: loggedInUser.id,
+                    recipentId: userId,
+                    type: "FOLLOW"
+                }
+            })
+        ])
+
         return new Response()
     } catch (error) {
         console.error(error, "from following api")

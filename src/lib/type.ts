@@ -96,6 +96,30 @@ export interface ICommentPage {
     previousCursor: string | null
 }
 
+export const notificationInclude = {
+    issuer: {
+        select: {
+            username: true,
+            name: true,
+            avatar: true
+        }
+    },
+    post: {
+        select: {
+            content: true
+        }
+    }
+} satisfies Prisma.NotificationInclude
+
+export type Notification = Prisma.NotificationGetPayload<{
+    include: typeof notificationInclude
+}>
+
+export interface INotificationPage {
+    notifications: Notification[],
+    nextCursor: string | null
+}
+
 export interface IFollowerInfo {
     followers: number
     isFollowedByUser: boolean

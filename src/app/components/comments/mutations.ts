@@ -53,7 +53,7 @@ export function useSubmitCommentMutation(postId: string) {
     return mutation;
 }
 
-export function useDeleteCommentMutation(comment: CommentData) {
+export function useDeleteCommentMutation() {
     const { toast } = useToast()
     const queryClient = useQueryClient()
 
@@ -65,6 +65,7 @@ export function useDeleteCommentMutation(comment: CommentData) {
             queryClient.setQueryData<InfiniteData<ICommentPage, string | null>>(
                 queryKey,
                 (oldData) => {
+                    console.log(oldData, "old")
                     if (!oldData) return;
                     return {
                         pageParams: oldData.pageParams,

@@ -16,7 +16,7 @@ interface ICommentMoreOptionProps {
 
 export default function MoreOption({ comment, className }: ICommentMoreOptionProps) {
 
-  const mutation = useDeleteCommentMutation(comment);
+  const mutation = useDeleteCommentMutation();
   const [showDialog, setShowDialog] = useState(false)
   return (<>
     <DropdownMenu>
@@ -29,7 +29,6 @@ export default function MoreOption({ comment, className }: ICommentMoreOptionPro
         {/* <DropdownMenuLabel>More</DropdownMenuLabel>
         <DropdownMenuSeparator /> */}
         <DropdownMenuRadioGroup>
-          <DropdownMenuSeparator />
           <DropdownMenuItem className="flex items-center cursor-pointer" onClick={() => setShowDialog(!showDialog)}>
             <Trash className="mr-2 h-4 w-4" />
             <span>Delete</span>

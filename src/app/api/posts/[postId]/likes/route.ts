@@ -1,6 +1,7 @@
 import { validateRequest } from "@/auth"
 import prisma from "@/lib/prisma"
 import { ILikeInfo } from "@/lib/type"
+import { User } from "lucide-react"
 
 export async function GET(req: Request, {
     params: { postId }
@@ -66,19 +67,42 @@ export async function POST(req: Request, {
             }, { status: 401 })
         }
 
-        await prisma.like.upsert({
-            where: {
-                userId_postId: {
+        const post = await prisma.post.findUnique({
+            where: { id: postId },
+            select: {
+                userId: true
+            }
+        })
+
+        if (!post) {
+            return Response.json({
+                error: "Post not found."
+            }, { status: 404 })
+        }
+
+        await prisma.$transaction([
+            prisma.like.upsert({
+                where: {
+                    userId_postId: {
+                        userId: loggedInUser.id,
+                        postId
+                    }
+                },
+                create: {
                     userId: loggedInUser.id,
                     postId
+                },
+                update: {}
+            }),
+            ...(loggedInUser.id !== post.userId ? [prisma.notification.create({
+                data: {
+                    issuerId: loggedInUser.id,
+                    recipentId: post.userId,
+                    postId,
+                    type: "LIKE"
                 }
-            },
-            create: {
-                userId: loggedInUser.id,
-                postId
-            },
-            update: {}
-        })
+            })] : [])
+        ])
 
         return new Response()
 
@@ -103,14 +127,37 @@ export async function DELETE(req: Request, {
             }, { status: 401 })
         }
 
-        await prisma.like.delete({
-            where: {
-                userId_postId: {
-                    userId: loggedInUser.id,
-                    postId
-                }
+        const post = await prisma.post.findUnique({
+            where: { id: postId },
+            select: {
+                userId: true
             }
         })
+
+        if (!post) {
+            return Response.json({
+                error: "Post not found."
+            }, { status: 404 })
+        }
+
+        await prisma.$transaction([
+            prisma.like.delete({
+                where: {
+                    userId_postId: {
+                        userId: loggedInUser.id,
+                        postId
+                    }
+                }
+            }),
+            prisma.notification.deleteMany({
+                where: {
+                    issuerId: loggedInUser.id,
+                    recipentId: post.userId,
+                    postId,
+                    type: "LIKE"
+                }
+            })
+        ])
 
         return new Response()
 

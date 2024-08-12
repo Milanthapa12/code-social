@@ -22,6 +22,8 @@ model User {
   comments Comment[]
   likes Like[]
   bookmarks Bookmark[]
+  receivedNotification Notification[] @relation("Recipent")
+  issuedNotification Notification[] @relation("Issuer")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
@@ -57,6 +59,7 @@ model Post {
   comments Comment[]
   likes Like[]
   bookmarks Bookmark[]
+  linkedNotification Notification[]
   createdAt DateTime @default(now())
 
   @@map("posts")
@@ -114,4 +117,24 @@ model Bookmark{
   @@map("bookmarks")
 }
 
+model Notification {
+  id String @id @default(cuid())
+  recipentId String
+  recipent User @relation("Recipent",fields: [recipentId], references: [id], onDelete: Cascade)
+  issuerId String
+  issuer User @relation("Issuer",fields: [issuerId], references: [id], onDelete: Cascade)
+  postId String?
+  post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  type NotificationType
+  read Boolean @default(false)
+  createdAt DateTime @default(now())
 
+  @@unique([recipentId, issuerId])
+  @@map("notifications")
+}
+
+enum NotificationType {
+  LIKE
+  FOLLOW
+  COMMENT
+}
