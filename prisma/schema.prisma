@@ -120,16 +120,16 @@ model Bookmark{
 model Notification {
   id String @id @default(cuid())
   recipentId String
-  recipent User @relation("Recipent",fields: [recipentId], references: [id], onDelete: Cascade)
+  recipent User @relation("Recipent", fields: [recipentId], references: [id], onDelete: Cascade)
   issuerId String
-  issuer User @relation("Issuer",fields: [issuerId], references: [id], onDelete: Cascade)
+  issuer User @relation("Issuer", fields: [issuerId], references: [id], onDelete: Cascade)
   postId String?
   post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
   type NotificationType
   read Boolean @default(false)
   createdAt DateTime @default(now())
 
-  @@unique([recipentId, issuerId])
+  // @@unique([recipentId, issuerId,type])
   @@map("notifications")
 }
 

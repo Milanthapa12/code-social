@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
         if (!user) return Response.json({
             error: "Unathorized access"
         }, { status: 401 })
+
         const posts = await prisma.post.findMany({
             include: getPostDataInclude(user.id),
             orderBy: { createdAt: "desc" },

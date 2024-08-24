@@ -2,6 +2,7 @@
 
 import { lucia } from "@/auth";
 import prisma from "@/lib/prisma";
+import streamServerClient from "@/lib/stream";
 import { registerRequestValidation, RegisterValues } from "@/lib/validation";
 import { hash } from "@node-rs/argon2"
 import { User } from "@prisma/client";
@@ -46,15 +47,33 @@ export async function register(credential: RegisterValues): Promise<{ error: str
                 error: "Email already taken"
             }
         }
-        await prisma.user.create({
-            data: {
+
+        await prisma.$transaction(async (tx) => {
+            await tx.user.create({
+                data: {
+                    id: userId,
+                    name: name,
+                    username,
+                    email,
+                    password: hashedPassword
+                }
+            });
+            await streamServerClient.upsertUser({
                 id: userId,
-                name: name,
                 username,
-                email,
-                password: hashedPassword
-            }
+                name: name ?? username
+            });
         })
+        // await prisma.user.create({
+        //     data: {
+        //         id: userId,
+        //         name: name,
+        //         username,
+        //         email,
+        //         password: hashedPassword
+        //     }
+        // })
+
         const luciaSession = await lucia.createSession(userId, {})
         const sessionCookie = lucia.createSessionCookie(luciaSession.id)
         cookies().set(

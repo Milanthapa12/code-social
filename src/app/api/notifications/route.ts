@@ -1,6 +1,6 @@
 import { validateRequest } from "@/auth"
 import prisma from "@/lib/prisma"
-import { getPostDataInclude, INotificationPage, notificationInclude, PostPage } from "@/lib/type"
+import { INotificationPage, notificationInclude } from "@/lib/type"
 import { NextRequest } from "next/server"
 
 export async function GET(req: NextRequest) {

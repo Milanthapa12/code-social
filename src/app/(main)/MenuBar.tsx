@@ -1,6 +1,7 @@
 import { Button } from "@/app/components/ui/button"
 import { Bell, Home, Mail } from "lucide-react"
 import Link from "next/link"
+import NotificationButton from "./NotificationButton"
 
 interface IMenuBarProps {
     className?: string
@@ -18,8 +19,9 @@ export default function MenuBar({ className }: IMenuBarProps) {
                 <span className="hidden lg:inline">Home</span>
             </Link>
         </Button>
+        <NotificationButton initialState={{ unreadCount: 0 }} />
 
-        <Button
+        {/* <Button
             variant="ghost"
             className="flex item-center justify-start gap-3"
             title="Notifications"
@@ -29,7 +31,7 @@ export default function MenuBar({ className }: IMenuBarProps) {
                 <Bell />
                 <span className="hidden lg:inline">Notifications</span>
             </Link>
-        </Button>
+        </Button> */}
 
         <Button
             variant="ghost"

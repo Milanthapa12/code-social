@@ -25,15 +25,16 @@ export async function submitComment({
             },
             include: getCommentDataInclude(user.id)
         }),
-        ...(user.id !== post.userId
+        ...(user.id !== post.userId)
             ? [prisma.notification.create({
                 data: {
                     issuerId: user.id,
                     recipentId: post.userId,
+                    postId: post.id,
                     type: "COMMENT"
                 }
             })] : []
-        )
+
     ])
     return newComment
 }

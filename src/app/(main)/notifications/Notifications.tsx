@@ -1,19 +1,15 @@
 "use client"
-
-import Post from '@/app/components/post/post'
 import InfiniteScrollContainer from '@/app/components/ui/InfiniteScrollContainer'
 import PostsLoadingSkeleton from '@/app/components/ui/PostLoadingSkeleton'
 import kyInstance from '@/lib/ky'
 import { INotificationPage } from '@/lib/type'
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
-import React from 'react'
-import { useSession } from '../SessionProvider'
 import Notification from './Notification'
+import { useEffect } from 'react'
 
 export default function Notifications() {
 
-    const { user } = useSession()
     const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } = useInfiniteQuery({
         queryKey: ["notifications"],
         queryFn: ({ pageParam }) => kyInstance.get(
@@ -23,6 +19,24 @@ export default function Notifications() {
         initialPageParam: null as string | null,
         getNextPageParam: (firstPag) => firstPag.nextCursor
     })
+
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation({
+        mutationFn: () => kyInstance.patch("/api/notifications/mark-as-read"),
+        onSuccess: () => {
+            queryClient.setQueryData(["unread-notification-count"], {
+                unreadCount: 0
+            })
+        },
+        onError(error) {
+            console.log("Failed to mark notification as read", error)
+        }
+    })
+
+    useEffect(() => {
+        mutate()
+    }, [mutate])
+
     const notifications = data?.pages.flatMap(page => page.notifications) || []
     if (status === 'pending') {
         return <PostsLoadingSkeleton />

@@ -1,6 +1,7 @@
 import { validateRequest } from "@/auth"
 import prisma from "@/lib/prisma"
 import { ILikeInfo } from "@/lib/type"
+import { Prisma } from "@prisma/client"
 import { User } from "lucide-react"
 
 export async function GET(req: Request, {
@@ -59,6 +60,7 @@ export async function GET(req: Request, {
 export async function POST(req: Request, {
     params: { postId }
 }: { params: { postId: string } }) {
+
     try {
         const { user: loggedInUser } = await validateRequest()
         if (!loggedInUser) {
@@ -94,6 +96,7 @@ export async function POST(req: Request, {
                 },
                 update: {}
             }),
+
             ...(loggedInUser.id !== post.userId ? [prisma.notification.create({
                 data: {
                     issuerId: loggedInUser.id,
@@ -141,6 +144,14 @@ export async function DELETE(req: Request, {
         }
 
         await prisma.$transaction([
+            prisma.notification.deleteMany({
+                where: {
+                    issuerId: loggedInUser.id,
+                    recipentId: post.userId,
+                    postId,
+                    type: "LIKE"
+                }
+            }),
             prisma.like.delete({
                 where: {
                     userId_postId: {
@@ -149,14 +160,7 @@ export async function DELETE(req: Request, {
                     }
                 }
             }),
-            prisma.notification.deleteMany({
-                where: {
-                    issuerId: loggedInUser.id,
-                    recipentId: post.userId,
-                    postId,
-                    type: "LIKE"
-                }
-            })
+
         ])
 
         return new Response()
