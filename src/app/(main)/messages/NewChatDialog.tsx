@@ -1,4 +1,4 @@
-import { Button } from '@/app/components/ui/button'
+// import { Button } from '@/app/components/ui/button'
 import { Dialog, DialogFooter, DialogHeader } from '@/app/components/ui/dialog'
 import { useToast } from '@/components/ui/use-toast'
 import { DialogContent, DialogTitle } from '@radix-ui/react-dialog'
@@ -44,7 +44,7 @@ export default function NewChatDialog({ onOpenChange, onChatCreated }: NewChatDi
         mutationFn: async () => {
             const channel = client.channel("messaging", {
                 members: [loggedinUser.id, ...selectedUsers.map((u) => u.id)],
-                name: selectedUsers.length > 1 ? loggedinUser.name + ", " + selectedUsers.map((u) => u.name).join(", ") : undefined
+                name: selectedUsers.length > 1 ? loggedinUser.displayName + ", " + selectedUsers.map((u) => u.name).join(", ") : undefined
             });
             await channel.create();
             return channel
