@@ -14,7 +14,7 @@ export const fileRouter = {
         if (!user) throw new UploadThingError("Unathorized")
         return { user }
     }).onUploadComplete(async ({ metadata, file }) => {
-        const oldAvatarURL = metadata.user.avatar;
+        const oldAvatarURL = metadata.user.avatarUrl;
         // deleting old avatar
         if (oldAvatarURL) {
             const key = oldAvatarURL.split(filePath)[1]
