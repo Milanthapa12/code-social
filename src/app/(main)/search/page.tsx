@@ -1,18 +1,18 @@
-import React from 'react'
-import SearchResult from './SearchResult'
-import { Metadata } from 'next'
+
+import { Metadata } from "next"
+import SearchResult from "./SearchResult";
 
 interface PageProps {
-    searchParams: { q: string }
+    searchParams: { q: string };
 }
 
-export function generateMetaData({ searchParams: { q } }: PageProps): Metadata {
+export function generateMetadata({ searchParams: { q } }: PageProps): Metadata {
     return {
-        title: `Search restult for ${q}`
-    }
+        title: `Search results for "${q}"`,
+    };
 }
 
-export default function page({ searchParams: { q } }: PageProps) {
+export default function Page({ searchParams: { q } }: PageProps) {
     return (
         <main className="flex w-full min-w-0 gap-5">
             <div className="w-full min-w-0 space-y-5">
@@ -24,5 +24,5 @@ export default function page({ searchParams: { q } }: PageProps) {
                 <SearchResult query={q} />
             </div>
         </main>
-    )
+    );
 }
