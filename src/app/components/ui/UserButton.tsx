@@ -23,7 +23,7 @@ export default function UserButton({ className }: IUserButtonProps) {
     return <DropdownMenu>
         <DropdownMenuTrigger asChild>
             <button className={cn("flex-none rounded-full", className)}>
-                <UserAvatar avatarURL={user.avatar} size={40} />
+                <UserAvatar avatarURL={user.avatarUrl} size={40} />
             </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
