@@ -1,16 +1,16 @@
 
-import { Metadata } from "next"
+// import { Metadata } from "next"
 import SearchResult from "./SearchResult";
 
 interface PageProps {
     searchParams: { q: string };
 }
 
-export function generateMetadata({ searchParams: { q } }: PageProps): Metadata {
-    return {
-        title: `Search results for "${q}"`,
-    };
-}
+// export function generateMetadata({ searchParams: { q } }: PageProps): Metadata {
+//     return {
+//         title: `Search results for "${q}"`,
+//     };
+// }
 
 export default function Page({ searchParams: { q } }: PageProps) {
     return (
