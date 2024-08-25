@@ -14,8 +14,8 @@ export default function useInitializeChatClient() {
     client.connectUser({
       id: user.id,
       username: user.username,
-      name: user.name,
-      image: user.avatar
+      name: user.displayName,
+      image: user.avatarUrl
     }, async () => kyInstance.get("/api/get-token").json<{ token: string }>().then((data) => data.token))
       .catch(error => console.error("Failed to connect user", error))
       .then(() => setChatClient(client))
@@ -23,7 +23,7 @@ export default function useInitializeChatClient() {
       setChatClient(null);
       client.disconnectUser().catch(error => console.error("Failed to disconnect user", error)).then(() => console.log("Connection Closed"))
     }
-  }, [user.id, user.name, user.username, user.avatar])
+  }, [user.id, user.displayName, user.username, user.avatarUrl])
 
 
   return chatClient
