@@ -1,11 +1,12 @@
 import React from 'react'
 import SearchResult from './SearchResult'
+import { Metadata } from 'next'
 
 interface PageProps {
     searchParams: { q: string }
 }
 
-export function generateMetaData({ searchParams: { q } }: PageProps) {
+export function generateMetaData({ searchParams: { q } }: PageProps): Metadata {
     return {
         title: `Search restult for ${q}`
     }
