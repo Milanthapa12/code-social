@@ -19,3 +19,7 @@ export function formateRelativeDate(from: Date) {
     }
   }
 }
+
+export function slugify(input: string): string {
+  return input.toLowerCase().replace(/ /g, "-").replace(/[a-zA-Z0-9-]/g, "")
+}

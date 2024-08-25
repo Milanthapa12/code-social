@@ -2,6 +2,7 @@ import { Button } from "@/app/components/ui/button"
 import { Bell, Home, Mail } from "lucide-react"
 import Link from "next/link"
 import NotificationButton from "./NotificationButton"
+import MessageButton from "./MessageButton"
 
 interface IMenuBarProps {
     className?: string
@@ -33,7 +34,7 @@ export default function MenuBar({ className }: IMenuBarProps) {
             </Link>
         </Button> */}
 
-        <Button
+        {/* <Button
             variant="ghost"
             className="flex item-center justify-start gap-3"
             title="Messages"
@@ -43,8 +44,8 @@ export default function MenuBar({ className }: IMenuBarProps) {
                 <Mail />
                 <span className="hidden lg:inline">Messages</span>
             </Link>
-        </Button>
-
+        </Button> */}
+        <MessageButton initialState={{ unreadCount: 0 }} />
         <Button
             variant="ghost"
             className="flex item-center justify-start gap-3"

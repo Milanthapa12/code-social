@@ -2,6 +2,7 @@ import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import LoginForm from "./LoginForm"
+import GoogleLoginButton from "./google/GoogleLoginButton"
 export const metadata: Metadata = {
     title: 'Login'
 }
@@ -17,6 +18,12 @@ export default function Page() {
                         </p>
                     </div>
                     <div className="space-y-5 px-6">
+                        <GoogleLoginButton />
+                        <div className="flex items-center gap-3">
+                            <div className="h-px flex-1 bg-muted" />
+                            <span>OR</span>
+                            <div className="h-px flex-1 bg-muted" />
+                        </div>
                         {/* Register form */}
                         <LoginForm />
                         <Link href={'/register'} className="text-center block hover:underline">

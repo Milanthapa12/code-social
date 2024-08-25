@@ -1,5 +1,4 @@
 "use client"
-
 import Post from '@/app/components/post/post'
 import InfiniteScrollContainer from '@/app/components/ui/InfiniteScrollContainer'
 import PostsLoadingSkeleton from '@/app/components/ui/PostLoadingSkeleton'
@@ -8,30 +7,25 @@ import { PostPage } from '@/lib/type'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Loader2 } from 'lucide-react'
 import React from 'react'
-import { useSession } from './SessionProvider'
+import { useSession } from '../SessionProvider'
+import page from './page'
 
-export default function Feed() {
+interface SearchResultsProps {
+    query: string
+}
+
+export default function SearchResult({ query }: SearchResultsProps) {
 
     const { user } = useSession()
-    // const query = useQuery<PostData[]>({
-    //     queryKey: ["post-feed", 'for-you'],
-    //     queryFn: async () => {
-    //         const res = await fetch("/api/posts/for-you");
-    //         if (!res.ok) {
-    //             throw new Error(`Request failed with status code ${res.status}`)
-    //         }
-    //         return res.json()
-    //     }
-    // })
-
     const { data, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } = useInfiniteQuery({
-        queryKey: ["post-feed", "for-you"],
+        queryKey: ["post-feed", "search", query],
         queryFn: ({ pageParam }) => kyInstance.get(
-            "/api/posts/for-you",
-            pageParam ? { searchParams: { cursor: pageParam } } : {}
+            "/api/search",
+            { searchParams: { q: query, ...(pageParam ? { cursor: pageParam } : {}) } }
         ).json<PostPage>(),
         initialPageParam: null as string | null,
-        getNextPageParam: (lastPage) => lastPage.nextCursor
+        getNextPageParam: (lastPage) => lastPage.nextCursor,
+        gcTime: 0,
     })
     const posts = data?.pages.flatMap(page => page.posts) || []
     if (status === 'pending') {
@@ -40,11 +34,11 @@ export default function Feed() {
 
     if (status === 'error') {
         return <p className='text-center text-destructive'>
-            An Error occurred while loading posts.
+            An Error occurred while loading search.
         </p>
     }
 
-    if (status === "success" && posts.length === 0 && !isFetching) return <p className='text-center text-muted-foreground'>No post availble.</p>
+    if (status === "success" && posts.length === 0 && !isFetching) return <p className='text-center text-muted-foreground'>No search result found.</p>
     // console.log(posts, "ss")
 
     return (<><InfiniteScrollContainer className='space-y-5' onButtonReached={() => hasNextPage && !isFetching && fetchNextPage()}>
