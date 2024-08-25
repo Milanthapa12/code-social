@@ -27,20 +27,22 @@ export function useSubmitPostMutation() {
             queryClient.setQueriesData<InfiniteData<PostPage, string | null>>(
                 queryFilter,
                 (oldData) => {
-                    const firstPage = oldData?.pages[0]
+                    const firstPage = oldData?.pages[0];
+
                     if (firstPage) {
                         return {
                             pageParams: oldData.pageParams,
                             pages: [
                                 {
-                                    posts: [newPost, ...firstPage.posts]
+                                    posts: [newPost, ...firstPage.posts],
+                                    nextCursor: firstPage.nextCursor,
                                 },
-                                ...oldData.pages.slice(1)
-                            ]
-                        }
+                                ...oldData.pages.slice(1),
+                            ],
+                        };
                     }
-                }
-            )
+                },
+            );
             // ONLY REQUIRED IF PAGE IS LOAIDING AND POST CREATED 
             queryClient.invalidateQueries({
                 queryKey: queryFilter.queryKey,
