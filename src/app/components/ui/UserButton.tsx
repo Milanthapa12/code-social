@@ -20,6 +20,7 @@ export default function UserButton({ className }: IUserButtonProps) {
     const { user } = useSession()
     const { theme, setTheme } = useTheme()
     const queryClient = useQueryClient()
+    console.log(user, "flkmsklfmslm")
     return <DropdownMenu>
         <DropdownMenuTrigger asChild>
             <button className={cn("flex-none rounded-full", className)}>
