@@ -108,22 +108,26 @@ async function WhoToFollow() {
 
 const getTrendingTopics = unstable_cache(
     async () => {
-        const result = await prisma.$queryRaw<{ hashtag: string, count: bigint }[]>`
-            SELECT LOWER(SUBSTRING_INDEX(REGEXP(content, '#[[:alnum:]_]+','g'))) AS hashtag, COUNT(*) AS count
-            FROM posts 
-            GROUP BY (hashtag)
-            ORDER BY count DESC, hashtag ASC 
-            LIMIT 5
-        `;
+        const result = await prisma.$queryRaw<{ hashtag: string; count: bigint }[]>`
+              SELECT LOWER(unnest(regexp_matches(content, '#[[:alnum:]_]+', 'g'))) AS hashtag, COUNT(*) AS count
+              FROM posts
+              GROUP BY (hashtag)
+              ORDER BY count DESC, hashtag ASC
+              LIMIT 5
+          `;
 
         return result.map((row) => ({
             hashtag: row.hashtag,
-            count: Number(row.count)
-        }))
-    }, ["tending_topics"], {
-    revalidate: 3 * 60 * 60, // cached 3hrs
-}
-)
+            count: Number(row.count),
+        }));
+    },
+    ["trending_topics"],
+    {
+        revalidate: 3 * 60 * 60,
+    },
+);
+
+
 async function TrendingTopic() {
     const trendingTopics = await getTrendingTopics()
     return (<div className='space-y-5 rounded-2xl bg-card p-5 shadow-sm'>
