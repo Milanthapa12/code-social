@@ -19,10 +19,10 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | Code Social",
-    default: "Social for Coders"
+    template: "%s | Social Echo",
+    default: "Social Echo"
   },
-  description: "The social media platform for nerds",
+  description: "The social media app to make new friends",
 };
 
 export default function RootLayout({
