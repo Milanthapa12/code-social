@@ -94,11 +94,11 @@ function MediaPreview({ media }: MediaPreviewProps) {
             alt="attachment"
             width={500}
             height={500}
-            className="mx-auto size-fit max-h-[30rem] rounded-2xl"
+            className="mx-auto size-fit max-h-[30rem] rounded-xl"
         />)
     }
     if (media.type === "VIDEO") {
-        return (<video controls className="size-fit max-h-[30rem] rounded-2xl">
+        return (<video controls className="size-fit max-h-[30rem] rounded-xl">
             <source src={media.url} type={media.type} />
         </video>)
     }
