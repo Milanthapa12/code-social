@@ -10,8 +10,8 @@ export default function UserAvatar({ avatarURL, size, className }: IUserAvatarPr
     return (<Image
         src={`${avatarURL ? avatarURL : '/assets/avatar-placeholder.png'}`}
         alt={'avatar'}
-        width={size ?? 40}
-        height={size ?? 40}
+        width={size ?? 50}
+        height={size ?? 50}
         className={cn("aspect-square h-fit flex-none rounded-full bg-secondary object-cover", className)}
 
     />

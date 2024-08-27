@@ -1,4 +1,3 @@
-// import { useToast } from "@/app/components/ui/use-toast";
 import { useToast } from "@/components/ui/use-toast"
 
 import { InfiniteData, QueryFilters, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -18,8 +17,8 @@ export function useSubmitPostMutation() {
             const queryFilter = {
                 queryKey: ["post-feed"],
                 predicate(query: any) {
-                    return query.queryKey.includes["for-you"] ||
-                        query.queryKey.includes["user-posts"] && query.queryKey.includes(user.id)
+                    return query.queryKey.includes("for-you") ||
+                        query.queryKey.includes("user-posts") && query.queryKey.includes(user.id)
 
                 }
             } satisfies QueryFilters

@@ -14,16 +14,18 @@ import BookmarkButton from "./BookmarkButton"
 import { useState } from "react"
 import { MessageSquare } from "lucide-react"
 import Comments from "../comments/Comments"
+import PostTextContainer from "./PostTextContainer"
 
 interface IPostProps {
     post: PostData,
     user: User
 }
 export default function Post({ post, user }: IPostProps) {
+
     const [showComment, setShowComment] = useState(false)
 
-    return (<article className="group/post space-y-3 rounded-2xl bg-card p-5 shadow-sm">
-        <div className="flex justify-between gap-3">
+    return (<article className="group/post space-y-3 bg-card shadow-sm pb-5">
+        <div className="flex justify-between gap-3 px-5 pt-5">
             <div className="flex flex-wrap gap-3">
                 <UserToolTip user={post.user}>
                     <Link href={`/users/${post.user.username}`}>
@@ -38,7 +40,7 @@ export default function Post({ post, user }: IPostProps) {
                             {post.user.name ?? post.user.username}
                         </Link>
                     </UserToolTip>
-                    <Link href={`/posts/${post.id}`} suppressHydrationWarning className="block text-sm text-muted-foreground hover:underline">
+                    <Link href={`/posts/${post.id}`} suppressHydrationWarning className="block text-xs text-muted-foreground hover:underline">
                         {formateRelativeDate(post.createdAt)}
                     </Link>
                 </div>
@@ -46,10 +48,14 @@ export default function Post({ post, user }: IPostProps) {
             {post.user.id === user.id && <PostMoreOption post={post} className="opacity-0 transition-opacity group-hover/post:opacity-100" />}
         </div>
         <div className="whitespace-pre-line break-words">
-            <Linkify>{post.content}</Linkify>
+            <Linkify>
+                <div className="px-5 pb-2">
+                    <PostTextContainer content={post.content} />
+                </div>
+            </Linkify>
             {!!post.attachments.length && (<MediaPreviews attachments={post.attachments} />)}
             <hr className="text-muted-foreground my-3" />
-            <div className="flex justify-between gap-5">
+            <div className="flex justify-between gap-5 px-5">
                 <div className="flex items-center gap-5">
                     <LikeButton
                         postId={post.id}
@@ -67,8 +73,10 @@ export default function Post({ post, user }: IPostProps) {
                     }}
                 />
             </div>
+            {/* <hr className="text-muted-foreground my-3" /> */}
         </div>
-        {showComment && <Comments post={post} />}
+        {showComment && <div className="px-5">
+            <Comments post={post} /></div>}
     </article>)
 }
 
@@ -77,7 +85,7 @@ interface MediaPreviewsProps {
 }
 
 function MediaPreviews({ attachments }: MediaPreviewsProps) {
-    return (<div className={cn("flex flex-col gap-3", attachments.length > 1 && "sm:grid sm:grid-cols-3")}>
+    return (<div className={cn("flex flex-col gap-3 px-5", attachments.length > 1 && "sm:grid sm:grid-cols-3")}>
         {attachments.map((m) => (
             <MediaPreview key={m.id} media={m} />
         ))}
