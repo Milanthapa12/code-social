@@ -7,6 +7,7 @@ interface IUserAvatarProps {
     className?: string
 }
 export default function UserAvatar({ avatarURL, size, className }: IUserAvatarProps) {
+    console.log(avatarURL, "sdfmsdlfmsl")
     return (<Image
         src={`${avatarURL ? avatarURL : '/assets/avatar-placeholder.png'}`}
         alt={'avatar'}

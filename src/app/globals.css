@@ -117,3 +117,7 @@
 .str-chat__channel-search-bar-button--exit-search {
   display: none;
 }
+.container-border-radius {
+  border-radius: 0.5rem;
+  /* border: 1px solid rgb(140 140 140 / .2); */
+}

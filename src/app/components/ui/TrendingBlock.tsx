@@ -41,7 +41,7 @@ async function WhoToFollow() {
         take: 5
     })
 
-    return (<div className='space-y-5 rounded-2xl bg-card p-5 shadow-sm'>
+    return (<div className='space-y-5 container-border-radius bg-card p-5 shadow-sm'>
         <div className="text-xl font-bold">Who to follow</div>
         {
             notFollowedUsers.map((user) => (
@@ -130,8 +130,9 @@ const getTrendingTopics = unstable_cache(
 
 async function TrendingTopic() {
     const trendingTopics = await getTrendingTopics()
-    return (<div className='space-y-5 rounded-2xl bg-card p-5 shadow-sm'>
-        <div className="text-xl font-bold">
+    return (<div className='space-y-5 container-border-radius bg-card p-5 shadow-sm'>
+        <div className="text-xl font-bold">Trending</div>
+        <div className="text-md font-bold">
             {trendingTopics.map(({ hashtag, count }) => {
                 const title = hashtag.split('#')[1];
                 return (<Link key={title} href={`/hashtag/${title}`} className='block'>

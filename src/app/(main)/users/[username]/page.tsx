@@ -74,7 +74,7 @@ async function UserProfile({ user, loggedInUserId }: IUserProfileProps) {
         isFollowedByUser: user.followers.some(({ followerId }) => followerId === loggedInUserId)
     }
 
-    return (<><div className="h-fit w-full space-y-5 rounded-2xl bg-card p-5 shadow-sm mb-5">
+    return (<><div className="h-fit w-full space-y-5 container-border-radius bg-card p-5 shadow-sm mb-5">
         <UserAvatar
             avatarURL={user.avatar}
             size={250}

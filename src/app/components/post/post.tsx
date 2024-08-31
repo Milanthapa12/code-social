@@ -24,7 +24,7 @@ export default function Post({ post, user }: IPostProps) {
 
     const [showComment, setShowComment] = useState(false)
 
-    return (<article className="group/post space-y-3 bg-card shadow-sm pb-5">
+    return (<article className="group/post space-y-3 container-border-radius bg-card shadow-sm pb-5">
         <div className="flex justify-between gap-3 px-5 pt-5">
             <div className="flex flex-wrap gap-3">
                 <UserToolTip user={post.user}>

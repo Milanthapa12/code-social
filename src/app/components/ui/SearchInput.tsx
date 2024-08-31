@@ -11,7 +11,6 @@ export default function SearchInput() {
         const form = e.currentTarget
         const q = (form.search as HTMLInputElement).value.trim()
         if (!q) return
-        console.log(q, "qerh")
         router.push(`/search?q=${encodeURIComponent(q)}`)
     }
     return (<form onSubmit={handleSubmit} method='GET' action={'/search'}>
